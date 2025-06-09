@@ -11,19 +11,22 @@ const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 
 const cors = require("cors");
+const verifyFirebaseToken = require("./middleware/authMiddleware");
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(
    cors({
-      origin: "http://localhost:5173",
+      origin: "http://localhost:3000",
       credentials: true,
    })
 );
 
-app.get("/", (req, res) => {
-   console.log("working");
-   res.send("yes");
+app.get("/", verifyFirebaseToken, (req, res) => {
+   res.json({
+      message: "Protected route accessed",
+      user: { uid: req.user.uid, email: req.user.email },
+   });
 });
 
 connectDB()
