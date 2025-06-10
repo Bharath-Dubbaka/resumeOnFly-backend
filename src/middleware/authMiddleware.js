@@ -19,14 +19,15 @@ const verifyFirebaseToken = async (req, res, next) => {
             .json({ error: "No authorization header provided" });
       }
 
-      // Extract token from "Bearer <token>"
+      // Extract token from "Bearer <token>" and remove Bearer
       const token = authHeader.split("Bearer ")[1];
 
       if (!token) {
          return res.status(401).json({ error: "No token provided" });
       }
 
-      console.log("Received token:", token.substring(0, 20) + "..."); // Log first 20 chars for debugging
+      // Log first 20 chars for debugging
+      console.log("Received token:", token.substring(0, 20) + "...");
 
       // Verify the Firebase token
       const decoded = await admin.auth().verifyIdToken(token);

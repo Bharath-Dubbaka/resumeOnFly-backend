@@ -12,6 +12,8 @@ const jwt = require("jsonwebtoken");
 
 const cors = require("cors");
 const verifyFirebaseToken = require("./middleware/authMiddleware");
+const { quotasRouter } = require("./routes/quotas");
+const { userDetailsRouter } = require("./routes/userDetails");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -22,11 +24,17 @@ app.use(
    })
 );
 
+app.use("/", quotasRouter, userDetailsRouter);
+
 app.get("/", verifyFirebaseToken, (req, res) => {
-   res.json({
-      message: "Protected route accessed",
-      user: { uid: req.user.uid, email: req.user.email },
-   });
+   try {
+      res.json({
+         message: "Protected route accessed",
+         user: { uid: req.user.uid, email: req.user.email },
+      });
+   } catch (error) {
+      console.log(error, "error");
+   }
 });
 
 connectDB()
