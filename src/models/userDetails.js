@@ -86,9 +86,16 @@ const userDetailsSchema = new mongoose.Schema(
       email: {
          type: String,
          trim: true,
-         
+
          lowercase: true,
          maxLength: 50,
+      },
+      og_email: {
+         type: String, // from Firebase auth
+         lowercase: true,
+         trim: true,
+         required: true,
+         immutable: true, // prevent accidental updates
       },
       phone: {
          type: String,
